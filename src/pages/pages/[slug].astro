@@ -35,8 +35,7 @@ export async function getStaticPaths() {
 // Provide each page's data as props for the Astro doc
 const { page } = Astro.props;
 ---
-
-// Renders the main page with the given title and body text.
+<!-- Renders the page with title and body text.-->
 <Main title={page.title}>
   <div class="flex flex-col items-center gap-4">
     <h1 class="text-5xl font-bold">{page.title}</h1>

@@ -22,20 +22,16 @@ const data = await client.request(
 );
 
 // Extract the pages array from the fetched data
-const pages: any[] = (data as { pages: any[] }).pages;
-
-/**
- * The main component of the index page.
- * It renders the homepage with a title and a list of pages fetched from the Hygraph endpoint.
- */
+const pages: { slug: string; title: string; }[] = (data as { pages: { slug: string; title: string; }[] }).pages;
+---
+<!--  Renders the homepage with a title and a list of pages fetched from the Hygraph -->
 <Main title="Homepage">
   <div class="grid place-items-center h-screen content-center">
     <h1 class="text-5xl font-bold">Pages that get pulled from Hygraph</h1>
-    <ul class="my-8">
+    <ul>
       {
-        // Render each page as a list item with a button and a link
         pages.map((page) => (
-          <li>
+          <li class="my-6">
             <Button>
               <a href={`/pages/${page.slug}`}>{page.title}</a>
             </Button>
