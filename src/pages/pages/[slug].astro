@@ -1,0 +1,49 @@
+---
+import { GraphQLClient } from "graphql-request";
+import Button from "../../components/Button.astro";
+import Main from '../../layouts/main.astro'
+
+export async function getStaticPaths() {
+  // Create the GraphQL client (usually abstracted to its own file)
+  const client = new GraphQLClient(
+    "https://us-east-1-shared-usea1-02.cdn.hygraph.com/content/cltg6frtj07ga08upevb6yqqm/master"
+  );
+
+  // Fetch the data via the GraphQL query
+  const data = await client.request(
+    `query MyQuery {
+      pages {
+          body {
+              text
+          }
+          title
+          slug
+      }
+    }`
+  );
+
+  // Map over the data and create the params and props for each page
+  const paths = (data as { pages: any[] }).pages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+
+  // Return the paths array to Astro
+  return paths;
+}
+
+// Provide each page's data as props for the Astro doc
+const { page } = Astro.props;
+---
+
+// Renders the main page with the given title and body text.
+<Main title={page.title}>
+  <div class="flex flex-col items-center gap-4">
+    <h1 class="text-5xl font-bold">{page.title}</h1>
+    <div class="text-lg" set:html={page.body.text}></div>
+    <Button>
+      <a href="https://hygraph.com/docs/implementations" target="_blank"
+        >Implementation Docs</a>
+    </Button>  
+  </div>
+</Main>
